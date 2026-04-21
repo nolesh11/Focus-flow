@@ -1,1 +1,25 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@theme {
+  --color-bg: #f8fafc; /* общий фон приложения */
+  --color-surface: #ffffff; /* карточки, модалки, основные блоки */
+  --color-surface-2: #eef2f7; /* secondary background, hover, input background */
+
+  --color-text: #1e293b; /* основной текст */
+  --color-text-muted: #64748b; /* вторичный текст, subtitle, helper text */
+
+  --color-primary: #a78bfa; /* главный акцент: primary button, title accents */
+  --color-primary-hover: #8b5cf6; /* hover для primary кнопок */
+
+  --color-timer: #67e8f9; /* progress bar, timer highlight, active session */
+  --color-success: #86efac; /* completed state, success badges */
+  --color-warning: #fcd34d; /* paused state, warning messages */
+  --color-danger: #fca5a5; /* delete button, errors, destructive actions */
+
+  --color-border: #d8e1ec; /* границы карточек, input, modal, divider */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
