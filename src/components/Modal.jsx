@@ -17,7 +17,7 @@ export function Modal({ open, children }) {
       ref={dialog}
       className="m-auto w-1/3 backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
-      {children}
+      {open ? children : null}
     </dialog>,
     document.getElementById("dialog"),
   );

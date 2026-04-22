@@ -9,10 +9,6 @@ import { useState } from "react";
 export function TasksList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  function handleModalOpen() {
-    setIsModalOpen(true);
-  }
-
   return (
     <section>
       <Modal open={isModalOpen}>
@@ -37,10 +33,10 @@ export function TasksList() {
             <Input id="date" label="Due Date" type="date" />
           </div>
           <div className="mt-4 flex justify-end gap-2">
-            <Button className="border border-border px-4 py-2 rounded-sm">
+            <Button onClick={() => setIsModalOpen(false)} className="border border-border px-4 py-2 rounded-sm">
               Cancel
             </Button>
-            <Button className="bg-primary text-stone-200 px-4  rounded-sm">
+            <Button type='submit' className="bg-primary text-stone-200 px-4  rounded-sm">
               Add Task
             </Button>
           </div>
@@ -54,7 +50,7 @@ export function TasksList() {
               <h4>Filter</h4>
               <div className="flex gap-1">
                 <Button>Filter</Button>
-                <Button onClick={handleModalOpen}>Add task</Button>
+                <Button onClick={() => setIsModalOpen(true)}>Add task</Button>
               </div>
             </div>
             <ul className="mt-4">
