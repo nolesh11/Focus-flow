@@ -6,11 +6,8 @@ function App() {
   return (
     <div className="bg-bg min-h-screen">
       <Header />
-      <main>
+      <main className="px-12 mt-15">
         <Dashboard />
-        <div className="px-12 mt-15">
-          <TasksList />
-        </div>
       </main>
     </div>
   );
