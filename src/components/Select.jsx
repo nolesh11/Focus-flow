@@ -1,8 +1,8 @@
-export function Select({ id, options, placeholder, label }) {
+export function Select({ id, options, placeholder, label, ...props }) {
   return (
     <div className="flex flex-col">
       <label htmlFor={id}>{label}</label>
-      <select id={id} className="border border-border p-3 rounded-sm mt-1">
+      <select id={id} {...props} className="border border-border p-3 rounded-sm mt-1">
         <option>{placeholder}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
