@@ -10,6 +10,14 @@ function taskReducer(state, action) {
     };
   }
 
+  if (action.type === "DELETE_TASK") {
+    const updatedTasks = state.tasks.filter((task) => task.id !== action.payload)
+
+    return {
+      tasks: updatedTasks
+    }
+  }
+
   return state;
 }
 
@@ -66,9 +74,17 @@ export function TaskContextProvider({ children }) {
     });
   }
 
+  function handleDeleteTask(id) {
+    tasksStateDispatch({
+      type: "DELETE_TASK",
+      payload: id,
+    });
+  }
+
   const taskCtx = {
     tasks: tasksState.tasks,
     addNewTask: handleAddTask,
+    deleteTask: handleDeleteTask,
   };
   return (
     <TasksContext.Provider value={taskCtx}>{children}</TasksContext.Provider>

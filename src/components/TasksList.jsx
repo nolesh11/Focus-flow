@@ -4,24 +4,30 @@ import { Modal } from "./Modal";
 import { Input } from "./Input";
 import { Select } from "./Select";
 import { Button } from "./Button";
+import { Badge } from "./Badge";
 
 import { taskCategories, taskPriorities } from "../mockData/options";
-import { Timer } from "lucide-react";
-import { TaskData } from "../data/taskData";
+import { Timer, EllipsisVertical } from "lucide-react";
 import { TasksContext } from "../store/tasksContext";
+
+const initialFormData = {
+  title: "",
+  description: "",
+  category: "",
+  priority: "",
+  estimatedPomodoros: "",
+  dueDate: "",
+};
 
 export function TasksList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    id: "",
-    title: "",
-    description: "",
-    category: "",
-    priority: "",
-    estimatedPomodoros: "",
-    dueDate: "",
-  });
-  const { tasks, addNewTask } = useContext(TasksContext);
+  const [activeMenuId, setActiveMenuId] = useState(null);
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const { tasks, addNewTask, deleteTask } = useContext(TasksContext);
+
+  console.log(tasks);
 
   function handleOnSubmit(event) {
     event.preventDefault();
@@ -32,21 +38,29 @@ export function TasksList() {
       description: formData.description,
       category: formData.category,
       priority: formData.priority,
-      estimatedPomodoros: formData.estimatedPomodoros,
+      estimatedPomodoros: Number(formData.estimatedPomodoros),
       dueDate: formData.dueDate,
     };
 
-    console.log(newTask);
-
     addNewTask(newTask);
     setIsModalOpen(false);
+    setFormData(initialFormData);
+  }
+
+  function handleOnReset() {
+    setFormData(initialFormData);
+    setIsModalOpen(false);
+  }
+
+  function handleOpenMenu(id) {
+    setActiveMenuId(id);
   }
 
   return (
     <>
       <Modal open={isModalOpen}>
         <h2 className="mb-4">Add New task</h2>
-        <form method="dialog" onSubmit={handleOnSubmit}>
+        <form onSubmit={handleOnSubmit}>
           <Input
             id="title"
             onChange={(e) =>
@@ -112,7 +126,7 @@ export function TasksList() {
           <div className="mt-4 flex justify-end gap-2">
             <Button
               type="button"
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleOnReset}
               className="border border-border px-4 py-2 rounded-sm"
             >
               Cancel
@@ -135,32 +149,55 @@ export function TasksList() {
           </div>
         </div>
         <ul className="mt-4">
-          {tasks.length === 0 && <p>No tasks yet</p>}
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="border border-border rounded-md p-4 mb-3 flex justify-between shadow-sm"
-            >
-              <div className="flex gap-2">
-                <Input type="checkbox" />
-                <div>
-                  <h4 className="font-bold">{task.title}</h4>
-                  <p className="text-sm text-text-muted">{task.category}</p>
+          {tasks.length === 0 && <li>No tasks yet</li>}
+          {tasks.length > 0 &&
+            tasks.map((task) => (
+              <li
+                key={task.id}
+                className="border border-border rounded-md p-4 mb-3 flex justify-between shadow-sm hover:bg-surface-2 hover:transition-all"
+              >
+                <div className="flex gap-2">
+                  <Input type="checkbox" />
+                  <div>
+                    <h4 className="font-bold">{task.title}</h4>
+                    <p className="text-sm text-text-muted">{task.category}</p>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p>{task.priority}</p>
-                <div className="flex gap-1">
-                  <span className="self-center">
-                    <Timer size={14} className="text-text-muted" />
-                  </span>
-                  <span className="text-sm text-text-muted">
-                    {task.estimatedPomodoros} mins
-                  </span>
+                <div className="flex gap-3">
+                  <div className="flex flex-col justify-end gap-1">
+                    <Badge variant={task.priority}>{task.priority}</Badge>
+                    <div className="flex">
+                      <span className="self-center">
+                        <Timer size={14} className="text-text-muted" />
+                      </span>
+                      <span className="text-sm text-text-muted">
+                        {task.estimatedPomodoros} mins
+                      </span>
+                    </div>
+                  </div>
+                  <div className="self-center relative">
+                    <div
+                      className={`${activeMenuId === task.id ? "block" : "hidden"} text-sm absolute -top-6 -left-15 p-2 rounded-sm bg-surface-2 flex flex-col gap-1`}
+                    >
+                      <Button>Details</Button>
+                      <Button>Edit</Button>
+                      <Button onClick={() => deleteTask(task.id)}>
+                        Delete
+                      </Button>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        handleOpenMenu(
+                          activeMenuId === task.id ? null : task.id,
+                        )
+                      }
+                    >
+                      <EllipsisVertical className="text-text-muted" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))}
         </ul>
       </div>
     </>
