@@ -128,13 +128,14 @@ export function TasksList() {
       </Modal>
       <div className="bg-surface p-8 rounded-xl shadow-md">
         <div className="flex justify-between">
-          <h4>Filter</h4>
+          <h4>Tasks</h4>
           <div className="flex gap-1">
-            <Button>Filter</Button>
+            <Button className="text-sm">Filter</Button>
             <Button onClick={() => setIsModalOpen(true)}>Add task</Button>
           </div>
         </div>
         <ul className="mt-4">
+          {tasks.length === 0 && <p>No tasks yet</p>}
           {tasks.map((task) => (
             <li
               key={task.id}

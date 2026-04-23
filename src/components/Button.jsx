@@ -1,6 +1,6 @@
 export function Button({ children, className, ...props }) {
   return (
-    <button {...props} className={className}>
+    <button {...props} className={`cursor-pointer ${className}`}>
       {children}
     </button>
   );
