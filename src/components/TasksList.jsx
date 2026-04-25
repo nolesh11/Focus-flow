@@ -1,14 +1,12 @@
 import { useContext, useState } from "react";
 
-import { Modal } from "./Modal";
-import { Input } from "./Input";
-import { Select } from "./Select";
 import { Button } from "./Button";
 import { Badge } from "./Badge";
+import { Input } from "./Input";
 
-import { taskCategories, taskPriorities } from "../mockData/options";
 import { Timer, EllipsisVertical } from "lucide-react";
 import { TasksContext } from "../store/tasksContext";
+import { TaskModalForm } from "./TaskModalForm";
 
 const initialFormData = {
   title: "",
@@ -56,90 +54,25 @@ export function TasksList() {
     setActiveMenuId(id);
   }
 
+  function handleFieldChange(field, value) {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [field]: value
+      }
+    })
+  }
+
   return (
     <>
-      <Modal open={isModalOpen}>
-        <h2 className="mb-4">Add New task</h2>
-        <form onSubmit={handleOnSubmit}>
-          <Input
-            id="title"
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
-            value={formData.title}
-            label="Task Title"
-            type="text"
-            required
-          />
-          <Input
-            id="description"
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
-            }
-            value={formData.description}
-            label="Description"
-            textarea
-          />
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Select
-              options={taskCategories}
-              id="categories"
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, category: e.target.value }))
-              }
-              value={formData.category}
-              label="Categories"
-              placeholder="Select category"
-            />
-            <Select
-              options={taskPriorities}
-              id="priorities"
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, priority: e.target.value }))
-              }
-              value={formData.priority}
-              label="Priorities"
-              placeholder="Select priority"
-            />
-            <Input
-              id="time"
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  estimatedPomodoros: e.target.value,
-                }))
-              }
-              value={formData.estimatedPomodoros}
-              label="Estimated Focus Time"
-              type="number"
-            />
-            <Input
-              id="date"
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, dueDate: e.target.value }))
-              }
-              value={formData.dueDate}
-              label="Due Date"
-              type="date"
-            />
-          </div>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button
-              type="button"
-              onClick={handleOnReset}
-              className="border border-border px-4 py-2 rounded-sm"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="bg-primary text-stone-200 px-4 rounded-sm"
-            >
-              Add Task
-            </Button>
-          </div>
-        </form>
-      </Modal>
+      <TaskModalForm
+        formData={formData}
+        isModalOpen={isModalOpen}
+        onChangeField={handleFieldChange}
+        onReset={handleOnReset}
+        onSubmitForm={handleOnSubmit}
+
+      />
       <div className="bg-surface p-8 rounded-xl shadow-md">
         <div className="flex justify-between">
           <h4>Tasks</h4>
