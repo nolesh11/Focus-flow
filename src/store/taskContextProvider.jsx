@@ -11,11 +11,27 @@ function taskReducer(state, action) {
   }
 
   if (action.type === "DELETE_TASK") {
-    const updatedTasks = state.tasks.filter((task) => task.id !== action.payload)
+    const updatedTasks = state.tasks.filter(
+      (task) => task.id !== action.payload,
+    );
 
     return {
-      tasks: updatedTasks
-    }
+      tasks: updatedTasks,
+    };
+  }
+
+  if (action.type === "UPDATE_TASK") {
+    const updatedTask = state.tasks.map((task) => {
+      if (task.id === action.payload.id) {
+        return action.payload;
+      }
+
+      return task;
+    });
+
+    return {
+      tasks: updatedTask,
+    };
   }
 
   return state;
@@ -81,11 +97,20 @@ export function TaskContextProvider({ children }) {
     });
   }
 
+  function handleUpdateTask(id) {
+    tasksStateDispatch({
+      type: "UPDATE_TASK",
+      payload: id,
+    });
+  }
+
   const taskCtx = {
     tasks: tasksState.tasks,
     addNewTask: handleAddTask,
     deleteTask: handleDeleteTask,
+    updateTask: handleUpdateTask,
   };
+
   return (
     <TasksContext.Provider value={taskCtx}>{children}</TasksContext.Provider>
   );

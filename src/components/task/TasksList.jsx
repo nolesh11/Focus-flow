@@ -76,10 +76,7 @@ export function TasksList() {
 
   function handleCloseMenu() {
     setActiveMenuId(null);
-  }
-
-  console.log(selectedTaskState);
-  
+  }  
 
   return (
     <>
