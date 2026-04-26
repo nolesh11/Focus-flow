@@ -1,6 +1,6 @@
-import { Timer } from "./Timer";
-import { Sessions } from "./Sessions";
-import { TasksList } from "./TasksList";
+import { Timer } from "../timer/Timer";
+import { Sessions } from "../session/Sessions";
+import { TasksList } from "../task/TasksList";
 
 export function Dashboard() {
   return (
