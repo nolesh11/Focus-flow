@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 
-import { Button } from "./Button";
-import { Badge } from "./Badge";
-import { Input } from "./Input";
+import { Button } from "../UI/Button";
+import { Badge } from "../UI/Badge";
+import { Input } from "../UI/Input";
 
 import { Timer, EllipsisVertical } from "lucide-react";
-import { TasksContext } from "../store/tasksContext";
+import { TasksContext } from "../../store/tasksContext";
 import { TaskModalForm } from "./TaskModalForm";
+import { TaskModalDetails } from "./TaskModalDetails";
 
 const initialFormData = {
   title: "",
@@ -20,12 +21,14 @@ const initialFormData = {
 export function TasksList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState(null);
+  const [selectedTaskState, setSelectedTaskState] = useState({
+    isOpen: false,
+    id: null,
+  });
 
   const [formData, setFormData] = useState(initialFormData);
 
   const { tasks, addNewTask, deleteTask } = useContext(TasksContext);
-
-  console.log(tasks);
 
   function handleOnSubmit(event) {
     event.preventDefault();
@@ -45,23 +48,38 @@ export function TasksList() {
     setFormData(initialFormData);
   }
 
-  function handleOnReset() {
-    setFormData(initialFormData);
+  function handleOnCloseForm() {
     setIsModalOpen(false);
-  }
-
-  function handleOpenMenu(id) {
-    setActiveMenuId(id);
+    setFormData(initialFormData);
   }
 
   function handleFieldChange(field, value) {
     setFormData((prev) => {
       return {
         ...prev,
-        [field]: value
-      }
-    })
+        [field]: value,
+      };
+    });
   }
+
+  function handleOpenDetailsModal(id) {
+    setSelectedTaskState({ isOpen: true, id: id });
+  }
+
+  function handleCloseDetailsModal() {
+    setSelectedTaskState({ isOpen: false, id: null });
+  }
+
+  function handleOpenMenu(id) {
+    setActiveMenuId(activeMenuId === id ? null : id);
+  }
+
+  function handleCloseMenu() {
+    setActiveMenuId(null);
+  }
+
+  console.log(selectedTaskState);
+  
 
   return (
     <>
@@ -69,9 +87,14 @@ export function TasksList() {
         formData={formData}
         isModalOpen={isModalOpen}
         onChangeField={handleFieldChange}
-        onReset={handleOnReset}
         onSubmitForm={handleOnSubmit}
-
+        onClose={handleOnCloseForm}
+      />
+      <TaskModalDetails
+        tasks={tasks}
+        selectedTaskId={selectedTaskState.id}
+        isDetailsModalOpen={selectedTaskState.isOpen}
+        onClose={handleCloseDetailsModal}
       />
       <div className="bg-surface p-8 rounded-xl shadow-md">
         <div className="flex justify-between">
@@ -110,21 +133,20 @@ export function TasksList() {
                   </div>
                   <div className="self-center relative">
                     <div
-                      className={`${activeMenuId === task.id ? "block" : "hidden"} text-sm absolute -top-6 -left-15 p-2 rounded-sm bg-surface-2 flex flex-col gap-1`}
+                      className={`${activeMenuId === task.id ? "block" : "hidden"} text-sm absolute -top-6 -left-15 p-2 rounded-sm bg-surface flex flex-col gap-1`}
                     >
-                      <Button>Details</Button>
+                      <Button onClick={() => handleOpenDetailsModal(task.id)}>
+                        Details
+                      </Button>
                       <Button>Edit</Button>
                       <Button onClick={() => deleteTask(task.id)}>
                         Delete
                       </Button>
+                      <Button onClick={handleCloseMenu}>
+                        Close
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() =>
-                        handleOpenMenu(
-                          activeMenuId === task.id ? null : task.id,
-                        )
-                      }
-                    >
+                    <Button onClick={() => handleOpenMenu(task.id)}>
                       <EllipsisVertical className="text-text-muted" />
                     </Button>
                   </div>

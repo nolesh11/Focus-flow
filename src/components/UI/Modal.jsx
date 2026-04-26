@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-export function Modal({ open, children }) {
+export function Modal({ open, children, onClose }) {
   const dialog = useRef();
 
   useEffect(() => {
@@ -16,6 +16,7 @@ export function Modal({ open, children }) {
     <dialog
       ref={dialog}
       className="m-auto w-1/3 backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
+      onClose={onClose}
     >
       {open ? children : null}
     </dialog>,

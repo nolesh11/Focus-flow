@@ -1,6 +1,6 @@
-import { Dashboard } from "./components/Dashboard";
-import { Header } from "./components/Header";
-import { TasksList } from "./components/TasksList";
+import { Dashboard } from "./components/dashboard/Dashboard";
+import { Header } from "./components/header/Header";
+import { TasksList } from "./components/task/TasksList";
 import { TaskContextProvider } from "./store/taskContextProvider";
 
 function App() {
